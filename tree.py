@@ -5,25 +5,27 @@ def Create_Tree(nbrSommet: int):
     for i in range(nbrSommet):
         l = []
         sommeet = input("saisie sommet : ")
-        points = input("saisie les points voisin:  ")
+        points = input(
+            "saisie tous les points voisin avec un espace entre eux")
         list_point = points.split()
         print(list_point)
 
         for i in list_point:
             print(i)
-            l.append([i, int(input("saisie poid voisin :  "))])
+            l.append([i, int(input("saisie le poids :  "))])
         br[sommeet] = l
 
     return br
 
 
-def Create_Heuristic(NbrPoint: int):
-    ls = {}
-    for i in range(NbrPoint):
+def Create_Heuristic(Nbr_Point: int):
+    H_dic = {}
+    for num_de_sommet_h in Nbr_Point:
         point = input("saisie point : ")
-        poid = input("saisie le poid de cette point:  ")
-        ls[point] = int(poid)
-    return ls
+        print(num_de_sommet_h)
+        poid = input("l'estimation' entre le target et sommet au dessus :  ")
+        H_dic[num_de_sommet_h] = int(poid)
+    return H_dic
 
     # total cost for nodes visite
 
@@ -40,7 +42,7 @@ def AStarSearch():
         node = opened[chosen_index][0]  # current node
         closed.append(opened[chosen_index])
         del opened[chosen_index]
-        if closed[-1][0] == 'G':        # break the loop if node G has been found
+        if closed[-1][0] == Target:        # break the loop if node G has been found
             break
         for item in tree[node]:
             if item[0] in [closed_item[0] for closed_item in closed]:
@@ -72,18 +74,8 @@ def AStarSearch():
     return closed, optimal_sequence
 
 
-heuristic = Create_Heuristic(7)
-print(heuristic)
-tree = Create_Tree(6)
-print(tree)
-print(heuristic)
-cost = {'S': 0}
-
-if __name__ == '__main__':
-    visited_nodes, optimal_nodes = AStarSearch()
-    print('visited nodes: ' + str(visited_nodes))
-    print('optimal nodes sequence: ' + str(optimal_nodes))
-
+nbr_de_noeuds = int(input('donner le nombre de noeuds :     '))
+nbr_de_sommets = int(input('donner le nombre de sommets :   '))
 
 # tree = {'S': [['A', 1], ['B', 5], ['C', 8]],
 #         'A': [['S', 1], ['D', 3], ['E', 7], ['G', 9]],
@@ -91,5 +83,19 @@ if __name__ == '__main__':
 #         'C': [['S', 8], ['G', 5]],
 #         'D': [['A', 3]],
 #         'E': [['A', 7]]}
+tree = Create_Tree(nbr_de_noeuds)
+print(tree)
+sommet_de_début = input('donner les sommet de début:    ')
+Target = input('donner le sommet target:   ')
+heuristic = Create_Heuristic(nbr_de_sommets)
+print(heuristic)
+print(heuristic)
+cost = {sommet_de_début: 0}
+print('la sommet de début a un cout egal a =   ', cost)
+if __name__ == '__main__':
+    visited_nodes, optimal_nodes = AStarSearch()
+    print('visited nodes: ' + str(visited_nodes))
+    print('optimal nodes sequence: ' + str(optimal_nodes))
+
 
 # heuristic = {'S': 8, 'A': 8, 'B': 4, 'C': 3, 'D': 5000, 'E': 5000, 'G': 0}
